@@ -20,6 +20,10 @@ Including another URLconf
 from django.contrib import admin
 
 
+#para solucionar el problema de no podervisualizar las imagenes de los usuarios
+from django.conf.urls.static import static
+from django.conf import settings
+
 #from django.contrib import admin
 from django.urls import path
 #vamos a importar las vistas
@@ -28,10 +32,9 @@ from Platzigram import views as local_views
 #previo a la importacion tengo que establecerla en el archivo settings.py
 from users import views as users_views
 
+from posts import views  as posts_views
+
 urlpatterns = [
-
-
-
     path('admin/', admin.site.urls),
     
     #Una vista en django es una función 
@@ -43,6 +46,5 @@ urlpatterns = [
     #path('lista/', local_views.lista_posts),
 
     
-    #path('posts/', posts_views.list_posts)
-
-]
+    path('posts/', posts_views.list_posts)
+] +  static(settings.MEDIA_URL , document_root=settings.MEDIA_ROOT)

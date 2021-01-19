@@ -12,7 +12,7 @@ class Profile(models.Model):#heredea de models.Models
     phone_number=models.CharField(blank=True, max_length=50)
 
     picture=models.ImageField(
-         upload_to='users/pictures' ,
+         upload_to='users/pictures' ,#las guarda en estas carpetas de users/picture que esta dentro de media
          blank=True,
          null=True
     )
