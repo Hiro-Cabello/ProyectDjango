@@ -21,6 +21,7 @@ class Controller:
         return existe
 
     def registrar_webscraping(self, con, webscraping):
+
         id = self.dbwebscraping.insert_webscraping(con, webscraping)
         return id
 

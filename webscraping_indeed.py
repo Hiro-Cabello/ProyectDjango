@@ -62,7 +62,6 @@ def scraping_ofertas(con, url_principal, prefix_url, sufix_url, pagina_inicial, 
             oferta["url_pagina"] = url_pagina
             # Almacena la url de la oferta
             oferta["url"] = link
-
             oferta["puesto"]  =el.find("h2", {"class": "title"}).get_text()
             
             empresa= el.find("span", {"class": "company"})  

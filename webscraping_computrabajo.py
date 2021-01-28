@@ -94,7 +94,7 @@ def scraping_ofertas(con, url_principal, prefix_url, sufix_url, pagina_inicial, 
             else:
                 oferta["lugar"]=''                
 
-
+          
             #MODIFICANDO
 
             # Accede al contenido HTML del detalle de la oferta

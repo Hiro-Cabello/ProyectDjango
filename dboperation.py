@@ -28,8 +28,8 @@ class DBWebscraping:
           mydb = connection.connect()         
           cur = mydb.cursor() 
           # insertando un registro
-          sql = "insert into webscraping (busqueda, busqueda_area, pagina_web, url_pagina, url_busqueda,fecha_creacion,fecha_modificacion,id_keyword) values (%s,%s,%s,%s,%s,current_date,current_date,%s)"
-          params = (carga["busqueda"], carga["busqueda_area"], carga["pagina"], carga["url_principal"],carga["url_busqueda"],carga["id_keyword"])
+          sql = "insert into webscraping (busqueda, busqueda_area, pagina_web, url_pagina, url_busqueda,fecha_creacion,fecha_modificacion,id_keyword,delati_team) values (%s,%s,%s,%s,%s,current_date,current_date,%s,%s)"
+          params = (carga["busqueda"], carga["busqueda_area"], carga["pagina"], carga["url_principal"],carga["url_busqueda"],carga["id_keyword"], carga["team"])
                     
           cur.execute(sql, params)                 
 
@@ -82,7 +82,7 @@ class DBOferta:
         try:
             mydb = connection.connect()
             cur = mydb.cursor()                                    
-            sql = "insert into Oferta (id_webscraping, titulo,empresa,lugar,salario,oferta_detalle,url_oferta,url_pagina,fecha_publicacion,fecha_creacion,fecha_modificacion,time_publicacion) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,current_date,current_date,%s)"            
+            sql = "insert into Oferta (id_webscraping, titulo,empresa,lugar,salario,oferta_detalle,url_oferta,url_pagina,fecha_publicacion,fecha_creacion,fecha_modificacion,time_publicacion) values (%s,%s,%s,%s,%s,%s,%s,%s,current_date,current_date,%s,%s)"            
             params = (oferta["id_carga"], oferta["puesto"].strip(), oferta["empresa"].strip(), oferta["lugar"].strip(),oferta["salario"].strip(),oferta["detalle"].strip(), oferta["url"], oferta["url_pagina"], oferta["fecha_publicacion"], oferta["timepublicacion"])
             cur.execute(sql, params)   
             mydb.commit()            

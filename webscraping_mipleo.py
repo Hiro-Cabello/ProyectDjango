@@ -66,6 +66,8 @@ def scraping_ofertas(con, url_principal, prefix_url, sufix_url, pagina_inicial, 
             
             oferta["url"] = href
 
+
+
             oferta["puesto"]  =el.find("span", {"class": "titleAd"}).get_text()
             
             empresa= el.find("span", {"class": "dateAd"})  
@@ -101,7 +103,7 @@ def scraping_ofertas(con, url_principal, prefix_url, sufix_url, pagina_inicial, 
                 oferta["salario"]=salario
             else:
                 oferta["salario"]='No informado' 
-
+            # oferta["fecha_publicacion"], oferta["timepublicacion"])
             reqDeta = requests.get(oferta["url"])            
             soup_deta = BeautifulSoup(reqDeta.content.decode('utf-8','ignore'), "lxml")
             soup_deta2 = BeautifulSoup(reqDeta.content.decode('utf-8','ignore'), "lxml")
@@ -134,12 +136,12 @@ def scraping_ofertas(con, url_principal, prefix_url, sufix_url, pagina_inicial, 
                                     )
                 str_aviso_deta = normalize( 'NFC', str_aviso_deta)
                 str_aviso_deta =  " ".join(str_aviso_deta.split()).upper()
-                print(str_aviso_deta)                                   
+                #print(str_aviso_deta)                                   
                 oferta["detalle"]=str_aviso_deta
 
             lista_oferta.append(oferta)
-            row = controller.registrar_oferta(con, oferta)
             
+            row = controller.registrar_oferta(con, oferta)
             aviso_tupla = aviso_deta = soup_deta.find("div", {"class": "description_item"}).find("p")
             str_aviso_tupla = str(aviso_tupla)
             str_aviso_tupla = re.sub(
@@ -149,6 +151,9 @@ def scraping_ofertas(con, url_principal, prefix_url, sufix_url, pagina_inicial, 
             str_aviso_tupla = normalize( 'NFC', str_aviso_tupla)
 
             cadena=str_aviso_tupla.replace("<p>","").replace("</p>","").split("<br/>")
+
+
+            
             for aviso in cadena:
                 a={}
                 if aviso.strip():
@@ -157,6 +162,8 @@ def scraping_ofertas(con, url_principal, prefix_url, sufix_url, pagina_inicial, 
                     lista_final.append(a)
                     #print(aviso.strip())
             controller.registrar_detalle_oferta(con, lista_final)
+
+            
                 
     return lista_oferta
 

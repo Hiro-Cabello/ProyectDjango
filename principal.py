@@ -59,7 +59,7 @@ def set_url_busqueda_mipleo(carga,puesto):
     #MODIFICADO URL MIPLEO
     carga["url_principal"] = MIPLEO["WS_PORTAL_LABORAL_URL"]
     urlbusqueda = "/ofertas-de-trabajo/?q=" + puesto
-    print("SE ESTA BUSCANDO: {}".format(puesto.replace("%20"," ")))
+    #print("SE ESTA BUSCANDO: {}".format(puesto.replace("%20"," ")))
     paginado = "&page=^"
     carga["url_prefix"] = carga["url_principal"] + urlbusqueda + paginado
     carga["url_sufix"] = ""
@@ -117,8 +117,13 @@ def delati_mipleo():
     carga["cant_ofertas"] = MIPLEO["WS_OFERTAS"]
     carga["busqueda_area"] = MIPLEO["WS_AREA"]
     carga["busqueda"] = ""
+    carga["team"]="NOS VAN A GANAR"
     lista_puestos = controller.buscar_cargos(con)
     n_puestos = len(lista_puestos) #lista_puestos
+    #for i in range(n_puestos): #n_puestos
+
+
+    #Borrar luego de la prueba
     for i in range(n_puestos): #n_puestos
         carga["id_keyword"] = i+1
         set_url_busqueda_mipleo(carga,lista_puestos[i])
@@ -127,7 +132,9 @@ def delati_mipleo():
         listaOferta = webscraping_mipleo.scraping_ofertas(con, carga["url_principal"], carga["url_prefix"], carga["url_sufix"],
                                                 carga["pagina_inicial"], carga["cant_paginas"], carga["cant_ofertas"],
                                                 carga["id_carga"])
-    print(listaOferta)
+    #print(listaOferta)
+
+
 
 
 if __name__ == "__main__":
