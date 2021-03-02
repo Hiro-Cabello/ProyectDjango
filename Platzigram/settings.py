@@ -41,9 +41,6 @@ INSTALLED_APPS = [
     #Local APP
     'posts',
     'users'
-
-
-
 ]
 
 MIDDLEWARE = [
@@ -51,9 +48,10 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',#gracias a este middleware podemos acceder a los usuarios desde cualquier template 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Platzigram.middleware.ProfileCompletionMiddleware',
 ]
 
 ROOT_URLCONF = 'Platzigram.urls'
@@ -61,7 +59,10 @@ ROOT_URLCONF = 'Platzigram.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        #Aqui añado la carpeta del template usando path absoluto
+        'DIRS': [
+            os.path.join(BASE_DIR , 'Templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,7 +84,7 @@ WSGI_APPLICATION = 'Platzigram.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(os.path.join(BASE_DIR, "db.sqlite3"))#BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -135,10 +136,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+#https://docs.djangoproject.com/en/3.1/ref/settings/#static-files
+
+
+
 STATIC_URL = '/static/'
+
+
+
+#Nombre de la carpeta static
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+#Para asegurar que la aplicacion pueda encontrar los archivos estaticos
+
+
 #Nota
 
 #Subiendo este proyrcto a git se tiene que realizar algunas modificaciones 
 
 MEDIA_ROOT= os.path.join(BASE_DIR , 'media')
 MEDIA_URL='/media/'
+
+LOGIN_URL='/users/login/'

@@ -1,4 +1,16 @@
-from django.shortcuts import render  
+from django.shortcuts import render,redirect
+
+
+#Ayuda a que no se pueda abrir este post sin antes haberse logeado
+from django.contrib.auth.decorators import login_required
+
+from datetime import datetime
+
+from posts.forms import PostForm 
+  
+
+
+
 #render es una funcion que toma un request
 #Las views manejan la lógica de los que traen los datos
 #from django.http import HttpResponse
@@ -49,7 +61,32 @@ posts = [
 
 
 
-
+@login_required
 def list_posts(request):
     #va a buscar en la directorios de la aplicacion donde hace match 
-    return render(request,'feed.html',{'posts':posts})
+    return render(request,'posts/feed.html',{'posts':posts})
+
+
+@login_required
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()#con esto automaticamente se va crear un posts
+            return redirect('feed')
+        
+    else : 
+        form = PostForm()
+
+    return render(
+        request=request,
+        template_name='posts/new.html',
+        context={
+            'form':form,
+            'user':request.user,
+            'profile':request.user.profile
+        }
+    )
+    
+
+
