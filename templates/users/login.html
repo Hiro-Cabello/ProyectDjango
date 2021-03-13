@@ -5,11 +5,16 @@
 
 {% block container %}
 
-    {% if error %}
+    {% if form.errors %}
+        <p class="alert alert-danger" >
+        Your username and password didn't march.Please try again.
+        </p>
+    {% endif %}
+    <!--{% if error %}
         <p class="alert alert-danger" >{{error}}</p>
     {% endif %}
-
-    <form method="POST" action='{% url "login" %}'>
+    -->
+    <form method="POST" action='{% url "users:login" %}'>
         {% csrf_token %} <!-- para evitar que hagan un submit desde otra página-->
         <div class="form-group">
             <input class="from-control-lg container-fluid" type="text" placeholder="Username" name="username">   
@@ -23,7 +28,11 @@
             Sign in!
         </button>
 
+
+
     </form>
+
+    <p class="mt-4">Don't have an account yet?<a href="{% url 'users:signup' %}"> Sign up here.  </a> </p>
 
 {% endblock %}
 

@@ -12,6 +12,5 @@ class PostForm(forms.ModelForm):
     #Configuracion de la clase en general
     class Meta:
         """Form settings."""
-
         model = Post
         fields = ('user', 'profile', 'title', 'photo')

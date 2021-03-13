@@ -25,7 +25,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 #from django.contrib import admin
-from django.urls import path
+from django.urls import path , include 
 #vamos a importar las vistas
 from Platzigram import views as local_views
 #Voy a importar las vistas de mi aplicacion post y las renombrare como posts_views
@@ -45,25 +45,10 @@ urlpatterns = [
     path('hi/<str:name>/<int:age>/',local_views.say_hi),
     #path('lista/', local_views.lista_posts),
 
-    
-    #path('posts/', posts_views.list_posts),
-    path('', posts_views.list_posts,name='feed'),
-    path('posts/', posts_views.list_posts,name='feed'),
-    
+    path('',include(('posts.urls','posts'),namespace='posts')),
+    path('users/',include(('users.urls','users'),namespace='users')),
 
-    path('posts/new/', posts_views.create_post,name='create_post'),
-
-
-    path('users/login/', users_views.login_view,name='login'),
-
-
-    path('users/logout/',users_views.logout_view , name='logout'),
-
-    path('users/signup/',users_views.signup,name='signup'),
-
-    #este va editar el profile
-    path('users/me/profile',users_views.update_profile,name='update_profile')
-
+    #path('users/logout',users_views.logout_view ,name='logout'),
 
 
 ] +  static(settings.MEDIA_URL , document_root=settings.MEDIA_ROOT)

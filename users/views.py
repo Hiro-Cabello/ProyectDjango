@@ -1,15 +1,37 @@
 from django.contrib.auth import authenticate , login , logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
-
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView
+from django.contrib.auth import views as auth_views
+from django.urls import reverse
 #models
 from django.contrib.auth.models import User
 from users.models import Profile
 
-from users.forms import ProfileForm
+from users.forms import ProfileForm 
+
+from posts.models import Post
+
 
 # Create your views here.
 
+class UserDetailView( LoginRequiredMixin , DetailView):
+    template_name='users/detail.html'
+    slug_field='username'
+    slug_url_kwarg = 'username'
+    queryset = User.objects.all()
+    context_object_name = 'user'
+
+    def get_context_data( self , **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.get_object()
+        context['posts']=Post.objects.filter(user=user).order_by('-created')
+        return context
+
+
+
+@login_required
 def update_profile(request):
     profile=request.user.profile
     #return render(request,'users/update_profile.html')
@@ -23,13 +45,14 @@ def update_profile(request):
             profile.website= data['website']
             profile.phone_number= data['phone_number']
             profile.biography= data['biography']
-            profile.picture= data['picture']
-
+            if data['picture']:
+                profile.picture= data['picture']
             print(form.cleaned_data)
-            
+
             profile.save()
 
-            return redirect('update_profile') 
+            url = reverse('users:detail',kwargs={'username':request.user.username})
+            return redirect(url) 
 
     else:
         form = ProfileForm()
@@ -44,20 +67,22 @@ def update_profile(request):
     )
 
 
+class LoginView(auth_views.LoginView ):
+    template_name='users/login.html'
 
-
+"""
 def login_view(request):
     #   import pdb;pdb.set_trace()   ---Deboger
-    """  
-    (Pdb) request.POST
-    <QueryDict: {}>
+      
+    #(Pdb) request.POST
+    #<QueryDict: {}>
 
-    TIPO DE PETICION
+    #TIPO DE PETICION
 
-    (Pdb) request.method
-    'GET'
+    #(Pdb) request.method
+    #'GET'
 
-    """
+    
     #Esto es el deboger
     #import pdb;pdb.set_trace()
     if request.method == 'POST':
@@ -67,14 +92,14 @@ def login_view(request):
         user=authenticate(request,username=username,password=password)
         if user:
             login(request,user)
-            return redirect('/posts/')
+            return redirect('posts:feed')
             #return redirect('/posts/')
         else: 
             return render(request,'users/login.html',{'error':'Invalid username and password'})
         
 
     return render(request,'users/login.html')
-
+"""
 
 def signup(request):
     #import pdb;pdb.set_trace(),
@@ -100,16 +125,20 @@ def signup(request):
         profile = Profile(user=user)
         profile.save()
 
-        return redirect('login')
+        return redirect('users:login')
 
     return render(request,'users/signup.html')
 
+class LogoutView(LoginRequiredMixin,auth_views.LogoutView):
+    template_name='users/logged_out.html'
 
-@login_required
+
+#@login_required
+"""
 def logout_view(request):
      logout(request)
-     return redirect('login')
-
+     return redirect('users:login')
+"""
 
 
 """ 
