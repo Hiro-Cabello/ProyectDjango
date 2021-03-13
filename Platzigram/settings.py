@@ -24,9 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'zt3)4245$1vvgqb&70)l(o4v0us3)=lfru7ddduf^pj_9kdybm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+
+#hiro nuevo
+#DEBUG = True
+DEBUG = False
+
+
+
+#hiro nuevo
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -52,6 +59,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'Platzigram.middleware.ProfileCompletionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',#hiro nuevo
+
 ]
 
 ROOT_URLCONF = 'Platzigram.urls'
@@ -71,7 +80,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-        },
+        }, 
+
     },
 ]
 
@@ -81,23 +91,46 @@ WSGI_APPLICATION = 'Platzigram.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+#
+#Esto estaba antes del hiro nuevo 
+#
+#
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': str(os.path.join(BASE_DIR, "db.sqlite3"))#BASE_DIR / 'db.sqlite3',
+#    }
+#}
+
+
+#Hiro nuevo
+import dj_database_url
+from decouple import config 
+#de esta manera de definie un base de datos para los proyectos en produccion
+DATABASES={
+    'default':dj_database_url.config(
+        default = config('DATABASE_URL')
+    )
+}
+
+
+
+
+
+
+"""
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(os.path.join(BASE_DIR, "db.sqlite3"))#BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'nombre_base_de_datos',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'nombre_base_de_datos',
-#        'USER': 'root',
-#        'PASSWORD': '',
-#        'HOST': '127.0.0.1',
-#        'PORT': '5432',
-#    }
-#}
+"""
 
 
 # Password validation
@@ -142,6 +175,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#HIRO NUEVO
+STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles')
+
 
 
 #Nombre de la carpeta static
@@ -162,3 +198,15 @@ LOGIN_URL='/users/login/'
 
 LOGIN_REDIRECT_URL='/'
 LOGOUT_REDIRECT_URL = LOGIN_URL
+
+
+
+#  tambien se tiene que instalar whitenoise 
+#pues django no puede subir archivos estaticos en produccion
+
+#Esto es para actualizar el archivo
+# pip freeze > requierements.txt
+
+
+#hiro nuevo es para mostrar archivos estaticos
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

@@ -52,3 +52,18 @@ urlpatterns = [
 
 
 ] +  static(settings.MEDIA_URL , document_root=settings.MEDIA_ROOT)
+
+
+"""
+pip freeze > requirements.txt
+
+Ya que heroku nos proveera de una base de datos que no se 
+encuentra en el mismo servidor 
+pip install dj-databases-url   
+
+pip install python-decouple
+
+
+
+
+"""
